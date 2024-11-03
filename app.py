@@ -1,9 +1,18 @@
-from flask import Flask
-from routes import bp
+from flask import Flask, jsonify, request
+from sentiment import analyze_wikipedia_article
+from consts import Endpoints
 
 app = Flask(__name__)
 
-app.register_blueprint(bp)
+@app.route('/')
+def sentiment():
+    title = request.args.get(Endpoints.API)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    if not title:
+        return jsonify({'error': 'title is required'}), 400
+
+    res = analyze_wikipedia_article(title)
+    return jsonify(res)
+
+if __name__ == "__main__":
+    app.run()   

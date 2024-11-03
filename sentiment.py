@@ -1,31 +1,21 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from psycopg.generators import fetch
-
+from nltk.tokenize import sent_tokenize
 from fetch import fetch_article
 sia = SentimentIntensityAnalyzer()
 
 def analyze_wikipedia_article(title, positive_threshold=0.5, negative_threshold=-0.5):
     page = fetch_article(title)
-
-    paragraphs = page.text.split("\n\n")
-
+    
+    sentences = sent_tokenize(page.text)
+    
     analysis_results = []
-    for i, paragraph in enumerate(paragraphs):
-        if paragraph.strip():
-            sentiment = sia.polarity_scores(paragraph)
-            analysis_results.append({
-                "paragraph": paragraph,
-                "sentiment": sentiment,
-                "highlight": sentiment['compound'] >= positive_threshold or sentiment['compound'] <= negative_threshold
-            })
-
-    for result in analysis_results:
-        if result["highlight"]:
-            sentiment_type = "Positive" if result["sentiment"]["compound"] >= positive_threshold else "Negative"
-            print(f"\n** {sentiment_type} Paragraph Detected **\n")
-            print(result["paragraph"])
-            print(f"Sentiment Score: {result['sentiment']['compound']}")
+    sentiment_type = ""
+    for sentence in sentences:
+        sentiment = sia.polarity_scores(sentence)
+        if sentiment['compound'] > 0:
+            sentiment_type = 'positive'
+        elif sentiment['compound'] < 0:
+            sentiment_type = 'negative'
         else:
-            print("\nNeutral Paragraph:\n")
-            print(result["paragraph"])
-            print(f"Sentiment Score: {result['sentiment']['compound']}")
+            sentiment_type = 'neutral'
+        analysis_results

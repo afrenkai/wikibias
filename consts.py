@@ -1,0 +1,2 @@
+class Endpoints:
+    API = "/api"
