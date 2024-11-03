@@ -8,7 +8,7 @@ def fetch_article(title):
     )
 
     page = wiki.page(title)
-    print(page.text)
+    return page
 
-if __name__ == "__main__":
-    fetch_article("Python (programming language)")
+# if __name__ == "__main__":
+#     fetch_article("Python (programming language)")
