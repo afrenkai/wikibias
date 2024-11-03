@@ -5,7 +5,7 @@ from consts import Endpoints, Keys
 
 app = Flask(__name__)
 
-@app.route(Endpoints.API)
+@app.route(Endpoints.api)
 def analyze_article():
     title = request.args.get(Keys.title)
 

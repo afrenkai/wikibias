@@ -1,9 +1,11 @@
 class Endpoints:
-    API = "/api"
-
+    api = "/api"
+    
 class Keys:
     title = "title"
-    
+    sentiment = "sentiment"
+
 class Sentiment:
-    pos_threshold: float = 0.2
-    neg_threshold: float = -0.2
+    pos_threshold = 0.4
+    neg_threshold = -0.4
+    sentiment_key = "compound"
