@@ -6,7 +6,7 @@ import json
 
 sia = SentimentIntensityAnalyzer()
 
-def analyze_wikipedia_article(text: str):
+def analyze_sentiment(text: str):
     paragraphs = text.split('\n\n')
     
     results = {}
@@ -22,7 +22,7 @@ def analyze_wikipedia_article(text: str):
 
     total_sentiment /= len(paragraphs)
     results[Keys.sentiment] = total_sentiment
-          
+
     return json.dumps(results, sort_keys=False)
     
 print(analyze_wikipedia_article(fetch_article("Donald Trump")))

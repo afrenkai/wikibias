@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from fetch import fetch_article
-from sentiment import analyze_wikipedia_article
+from sentiment import analyze_sentiment
+from bias import analyze_bias
 from consts import Endpoints, Keys
 
 app = Flask(__name__)
@@ -14,9 +15,9 @@ def analyze_article():
 
     article = fetch_article(title)
     print(f"Fetched article")
-    analyzed = analyze_wikipedia_article(article)
+    sentiment = analyze_sentiment(article)
 
-    return 
+    return sentiment
 
 if __name__ == "__main__":
     app.run()   
