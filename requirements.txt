@@ -1,6 +1,6 @@
 nltk
 flask
 wikipedia-api
-transformers
 torch
-numpt
+transformers
+numpy

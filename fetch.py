@@ -10,8 +10,8 @@ def fetch_article(title: str) -> str:
     )
 
     text = wiki.page(title).text
+    
+    return text.split("Notes")[0]
 
-    return text.split("See also")[0]
-
-# if __name__ == "__main__":
-#     fetch_article("Python (programming language)")
+if __name__ == "__main__":
+    fetch_article("Python (programming language)")

@@ -25,4 +25,4 @@ def analyze_sentiment(text: str):
 
     return json.dumps(results, sort_keys=False)
     
-print(analyze_wikipedia_article(fetch_article("Donald Trump")))
+# print(analyze_sentiment(fetch_article("Donald Trump")))
