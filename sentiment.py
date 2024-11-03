@@ -24,5 +24,3 @@ def analyze_sentiment(text: str):
     results[Keys.sentiment] = total_sentiment
 
     return json.dumps(results, sort_keys=False)
-    
-print(analyze_wikipedia_article(fetch_article("Donald Trump")))
