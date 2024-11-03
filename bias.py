@@ -40,23 +40,20 @@ def analyze_bias(text: str):
     return results
 
 def split_paragraph(paragraph, max_length=500):
-    words = paragraph.split()  # Split paragraph by words
+    words = paragraph.split()
     chunks = []
     chunk_text = ""
 
     for word in words:
-        # Add word to chunk and check token length
         temp_chunk = f"{chunk_text} {word}".strip()
         token_count = len(tokenizer.encode(temp_chunk, add_special_tokens=False))
 
         if token_count <= max_length:
             chunk_text = temp_chunk
         else:
-            # If adding the word exceeds max tokens, finalize the current chunk
             chunks.append(chunk_text)
-            chunk_text = word  # Start new chunk with the current word
+            chunk_text = word
 
-    # Add the last chunk if not empty
     if chunk_text:
         chunks.append(chunk_text)
 

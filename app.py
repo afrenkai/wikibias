@@ -6,7 +6,7 @@ from consts import Endpoints, Keys
 
 app = Flask(__name__)
 
-@app.route(Endpoints.api)
+@app.route(Endpoints.sentiment)
 def analyze_article():
     title = request.args.get(Keys.title)
 
@@ -16,8 +16,21 @@ def analyze_article():
     article = fetch_article(title)
     print(f"Fetched article")
     sentiment = analyze_sentiment(article)
-
+    
     return sentiment
+
+@app.route(Endpoints.bias)
+def analyze_bias_article():
+    title = request.args.get(Keys.title)
+    
+    if not title:
+        return jsonify({"error": "title is required"}), 400
+    
+    article = fetch_article(title)
+    print(f"got article")
+    bias = analyze_bias(article)
+    
+    return bias
 
 if __name__ == "__main__":
     app.run()   
