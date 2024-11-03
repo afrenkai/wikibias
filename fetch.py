@@ -9,7 +9,9 @@ def fetch_article(title: str) -> str:
         extract_format=wp.ExtractFormat.WIKI
     )
 
-    return wiki.page(title).text
+    text = wiki.page(title).text
+
+    return text.split("See also")[0]
 
 # if __name__ == "__main__":
 #     fetch_article("Python (programming language)")

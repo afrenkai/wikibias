@@ -1,21 +1,21 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import sent_tokenize
 from fetch import fetch_article
+from consts import Sentiment
+import json
+
 sia = SentimentIntensityAnalyzer()
 
-def analyze_wikipedia_article(title, positive_threshold=0.5, negative_threshold=-0.5):
-    page = fetch_article(title)
+def analyze_wikipedia_article(text: str):
+    paragraphs = text.split('\n\n')
     
-    sentences = sent_tokenize(page.text)
+    results = {}
     
-    analysis_results = []
-    sentiment_type = ""
-    for sentence in sentences:
-        sentiment = sia.polarity_scores(sentence)
-        if sentiment['compound'] > 0:
-            sentiment_type = 'positive'
-        elif sentiment['compound'] < 0:
-            sentiment_type = 'negative'
-        else:
-            sentiment_type = 'neutral'
-        analysis_results
+    for paragraph in paragraphs:
+        sentiment = sia.polarity_scores(paragraph)
+        if sentiment["compound"] >= Sentiment.pos_threshold or sentiment["compound"] <= Sentiment.neg_threshold:  
+            results[paragraph] = sentiment["compound"]
+
+    return json.dumps(results, sort_keys=False)
+    
+print(analyze_wikipedia_article(fetch_article("Donald Trump")))

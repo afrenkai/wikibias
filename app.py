@@ -14,9 +14,9 @@ def analyze_article():
 
     article = fetch_article(title)
     print(f"Fetched article")
-    #analyzed = analyze_wikipedia_article(article)
+    analyzed = analyze_wikipedia_article(article)
 
-    return article
+    return 
 
 if __name__ == "__main__":
     app.run()   
