@@ -56,4 +56,4 @@ def split_paragraph(paragraph, max_length=500):
         chunks.append(chunk_text)
     return chunks
 
-print(analyze_bias(fetch_article("Donald Trump")))
+# print(analyze_bias(fetch_article("Donald Trump")))
