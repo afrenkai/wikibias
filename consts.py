@@ -6,17 +6,18 @@ class Keys:
     title = "title"
 
 class JSON:
-    total_key = "total"
-    sentiment_key = "sentiment"
+    page_key = "page"
+    type_key = "type"
     text_key = "text"
     confidence_key = "confidence"
-    type_key = "type"
+
+    sentiment_key = "sentiment"
     type_positive_value = "positive"
     type_negative_value = "negative"
+    
     bias_key = "bias"
-    side_key = "side"
-    
-    
+    type_left_value = "left"
+    type_right_value = "right"
 
 class Sentiment:
     pos_threshold = 0.4
@@ -24,6 +25,5 @@ class Sentiment:
     sentiment_key = "compound"
 
 class Bias:
-    left_threshold = 0.4
-    right_threshold = 0.4
+    side_threshold = 0.6
     

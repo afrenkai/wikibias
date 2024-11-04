@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 from fetch import fetch_article
-from consts import Keys
+from consts import JSON, Bias
 import numpy as np
 import json
 
@@ -13,14 +13,13 @@ def analyze_bias(text: str):
     results = {}
 
     # [0] -> left 
-    # [1] -> center
-    # [2] -> right
-    results[Keys.bias] = [0, 0, 0]
-    total_bias = np.zeros(3)
+    # [1] -> right
+    results[JSON.bias_key] = []
+    total_bias = np.zeros(2)
 
     for paragraph in paragraphs:
         chunks = split_paragraph(paragraph)
-        chunk_bias = np.zeros(3)
+        chunk_bias = np.zeros(2)
 
         for chunk in chunks:
             inputs = tokenizer(chunk, return_tensors="pt", truncation = True, max_length=512)
@@ -30,19 +29,49 @@ def analyze_bias(text: str):
             loss, logits = outputs[:2]
             softmax_score = logits.softmax(dim=-1)[0].tolist()
 
-            softmax_score = np.array(softmax_score)
+            # convert to np array and delete centrist
+            softmax_score = np.delete(np.array(softmax_score), 1)
+            
+            # add chunk bias
             chunk_bias = np.add(chunk_bias, softmax_score)
 
+        # ensure divison by 0 doesn't occur
         if len(chunks) > 0:
-            paragraph_bias = np.divide(chunk_bias, len(chunks)).tolist()
-            total_bias = np.add (total_bias, paragraph_bias)
-            results[paragraph] = paragraph_bias
+            paragraph_bias = np.divide(chunk_bias, len(chunks))
+            total_bias = np.add(total_bias, paragraph_bias)
 
-    total_bias = np.divide(total_bias, len(paragraphs))
+            paragraph 
+            # assign side to paragraph if passing threshold
+            if max(paragraph_bias[0], paragraph_bias[1]) > Bias.side_threshold:
+                entry = {}
+                entry[JSON.text_key] = paragraph
 
-    # remove centrist
-    total_bias = np.delete(total_bias, 1)
-    results[Keys.bias] = total_bias.tolist()
+                if paragraph_bias[0] > paragraph_bias[1]:
+                    # left
+                    entry[JSON.side_key] = JSON.side_left_value
+                    entry[JSON.confidence_key] = paragraph_bias[0]
+                else:
+                    # right
+                    entry[JSON.side_key] = JSON.side_right_value
+                    entry[JSON.confidence_key] = paragraph_bias[1]
+
+                results[JSON.bias_key].append(entry)
+
+    # ensure divison by 0 doesn't occur
+    if len(paragraphs) > 0:
+        total_bias = np.divide(total_bias, len(paragraphs))
+
+    page_entry = {}
+    if total_bias[0] > total_bias[1]:
+        # left
+        page_entry[JSON.side_key] = JSON.side_left_value
+        page_entry[JSON.confidence_key] = total_bias[0]
+    else:
+        # right
+        page_entry[JSON.side_key] = JSON.side_right_value
+        page_entry[JSON.confidence_key] = total_bias[1]
+
+    results[JSON.page_key] = page_entry
     
     return json.dumps(results, sort_keys = False)
 
