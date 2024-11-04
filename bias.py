@@ -50,7 +50,6 @@ def analyze_bias(text: str):
                     entry[JSON.confidence_key] = paragraph_bias[1]
 
                 results[JSON.bias_key].append(entry)
-                print(entry)
                 
     if len(paragraphs) > 0:
         total_bias = np.divide(total_bias, len(paragraphs))
@@ -65,6 +64,7 @@ def analyze_bias(text: str):
 
     results[JSON.page_key] = page_entry
     
+    print ("bias done")
     return json.dumps(results, sort_keys=False)
 
 def split_paragraph(paragraph, max_length=500):

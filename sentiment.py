@@ -40,5 +40,5 @@ def analyze_sentiment(text: str):
     page_entry[JSON.type_key] = overall_type 
     
     results[JSON.page_key] = page_entry
-    
-    return json.dumps(results, sort_keys=False, indent = 2)
+    print("sentiment done")
+    return json.dumps(results, sort_keys=False)

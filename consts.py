@@ -20,10 +20,10 @@ class JSON:
     type_right_value = "right"
 
 class Sentiment:
-    pos_threshold = 0.4
-    neg_threshold = -0.4
+    pos_threshold = 0.3
+    neg_threshold = -0.3
     sentiment_key = "compound"
 
 class Bias:
-    side_threshold = 0.6
+    side_threshold = 0.4
     
