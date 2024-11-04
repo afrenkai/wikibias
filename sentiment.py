@@ -23,10 +23,6 @@ def analyze_sentiment(text: str):
     total_sentiment /= len(paragraphs)
     results[Keys.sentiment] = total_sentiment
 
-<<<<<<< HEAD
     return json.dumps(results, sort_keys=False)
     
 # print(analyze_sentiment(fetch_article("Donald Trump")))
-=======
-    return json.dumps(results, sort_keys=False)
->>>>>>> 6126cd906708e06d55ae0e3682207082310d7dcc

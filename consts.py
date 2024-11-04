@@ -1,4 +1,5 @@
 class Endpoints:
+    API = "/api"
     sentiment = "/sentiment"
     bias = "/bias"
     
