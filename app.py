@@ -1,26 +1,29 @@
 from flask import Flask, jsonify, request
 from sentiment import analyze_sentiment
 from bias import analyze_bias
-from consts import Endpoints
+from consts import Endpoints, Keys
+from fetch import fetch_article
 
 app = Flask(__name__)
 
-@app.route('/sentiment', methods = ['GET'])
+@app.route(Endpoints.sentiment, methods = ['GET'])
 def sentiment():
-    title = request.args.get(Endpoints.API)
+    title = request.args.get(Keys.title)
 
     if not title:
         return jsonify({'error': 'title is required'}), 400
 
-    res = analyze_sentiment(title)
-    return jsonify(res)
+    article = fetch_article(title)
 
-@app.route("/bias", methods = ['GET'])
+    return analyze_sentiment(article)
+
+@app.route(Endpoints.bias, methods = ['GET'])
 def bias():
-    title = request.args.get(Endpoints.API)
+    title = request.args.get(Keys.title)
     
     if not title:
         return jsonify({'error': 'title is required'}), 400
     
-    res = analyze_bias(title)
-    return jsonify(res)
+    article = fetch_article(title)
+
+    return analyze_bias(article)
