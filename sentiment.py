@@ -1,28 +1,40 @@
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from nltk.tokenize import sent_tokenize
-from fetch import fetch_article
-from consts import Sentiment, Keys
 import json
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from fetch import fetch_article
+from consts import Sentiment, Keys, JSON
 
 sia = SentimentIntensityAnalyzer()
 
 def analyze_sentiment(text: str):
     paragraphs = text.split('\n\n')
     
-    results = {}
-    results[Keys.sentiment] = 0
+    results = {JSON.sentiment_key: []}
     total_sentiment = 0
     
     for paragraph in paragraphs:
         sentiment = sia.polarity_scores(paragraph)
-        total_sentiment += sentiment[Sentiment.sentiment_key]
+        sentiment_score = sentiment[Sentiment.sentiment_key] 
+        confidence = abs(sentiment_score) 
+        
+        if sentiment_score >= Sentiment.pos_threshold:
+            sentiment_type = JSON.type_positive_value
+        elif sentiment_score <= Sentiment.neg_threshold:
+            sentiment_type = JSON.type_negative_value
+        else:
+            continue 
 
-        if sentiment[Sentiment.sentiment_key] >= Sentiment.pos_threshold or sentiment[Sentiment.sentiment_key] <= Sentiment.neg_threshold:  
-            results[paragraph] = sentiment[Sentiment.sentiment_key]
-
-    total_sentiment /= len(paragraphs)
-    results[Keys.sentiment] = total_sentiment
-
-    return json.dumps(results, sort_keys=False)
+        results[JSON.sentiment_key].append({
+            JSON.text_key: paragraph,
+            JSON.confidence_key: confidence,
+            JSON.type_key: sentiment_type
+        })
+        
+        total_sentiment += sentiment_score
+        
+    # overall_sentiment = total_sentiment / len(paragraphs) if paragraphs else 0
     
-# print(analyze_sentiment(fetch_article("Donald Trump")))
+    # results[JSON.sentiment_key] = overall_sentiment
+    
+    return json.dumps(results, sort_keys=False, indent=2)
+
+print(analyze_sentiment(fetch_article("Donald Trump")))
