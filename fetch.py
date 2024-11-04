@@ -13,5 +13,5 @@ def fetch_article(title: str) -> str:
     
     return text.split("Notes")[0]
 
-if __name__ == "__main__":
-    fetch_article("Python (programming language)")
+# if __name__ == "__main__":
+#     fetch_article("Python (programming language)")
