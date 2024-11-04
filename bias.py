@@ -48,11 +48,11 @@ def analyze_bias(text: str):
 
                 if paragraph_bias[0] > paragraph_bias[1]:
                     # left
-                    entry[JSON.side_key] = JSON.side_left_value
+                    entry[JSON.type_key] = JSON.type_left_value
                     entry[JSON.confidence_key] = paragraph_bias[0]
                 else:
                     # right
-                    entry[JSON.side_key] = JSON.side_right_value
+                    entry[JSON.type_key] = JSON.type_right_value
                     entry[JSON.confidence_key] = paragraph_bias[1]
 
                 results[JSON.bias_key].append(entry)
@@ -64,11 +64,11 @@ def analyze_bias(text: str):
     page_entry = {}
     if total_bias[0] > total_bias[1]:
         # left
-        page_entry[JSON.side_key] = JSON.side_left_value
+        page_entry[JSON.type_key] = JSON.type_left_value
         page_entry[JSON.confidence_key] = total_bias[0]
     else:
         # right
-        page_entry[JSON.side_key] = JSON.side_right_value
+        page_entry[JSON.type_key] = JSON.type_right_value
         page_entry[JSON.confidence_key] = total_bias[1]
 
     results[JSON.page_key] = page_entry

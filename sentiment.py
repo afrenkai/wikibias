@@ -8,7 +8,7 @@ sia = SentimentIntensityAnalyzer()
 def analyze_sentiment(text: str):
     paragraphs = text.split('\n\n')
     
-    results = {JSON.sentiment_key: [], JSON.total_key: []}
+    results = {JSON.sentiment_key: [], JSON.page_key: []}
     total_sentiment = 0
     
     for paragraph in paragraphs:
@@ -36,11 +36,9 @@ def analyze_sentiment(text: str):
     overall_type = JSON.type_positive_value if overall_sentiment >= 0 else JSON.type_negative_value
 
     page_entry = {}
-    page_entry[JSON.confidence_key] = overall_sentiment
+    page_entry[JSON.confidence_key] = abs(overall_sentiment)
     page_entry[JSON.type_key] = overall_type 
     
-    results[JSON.total_key] = page_entry
+    results[JSON.page_key] = page_entry
     
     return json.dumps(results, sort_keys=False, indent = 2)
-
-print(analyze_sentiment(fetch_article("Donald Trump")))
